@@ -26,12 +26,38 @@ public class HomePageTest extends BaseClass {
 		homePage.clickPassword();
 	}
 	
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void clickNURTest() {
 		homePage.clickNewUserRegistration();
 	}
 	
+	// Test for implicit wait and it shows No such element exception
+	@Test(enabled = false)
+	public void clickWrongNURTest() {
+		homePage.clickWrongNewUserRegistration();
+	}
 	
+	// This test case will fail, when you remove Pagefactory class from code form HomePage to test this
+	// When PageFactory class is absent, you will find NullPointerException
+	@Test (enabled = false)
+	public void nullPointerExceptionTest() throws InterruptedException {
+		homePage.clickNewUserRegistration();
+	}
+	
+	@Test (enabled = false)
+	public void forgotUserIdTest () throws InterruptedException {
+		homePage.forgotUserIdClick();
+	}
+	
+	@Test (enabled = false)
+	public void inputTextInUserIdFieldTest () {
+		homePage.inputTextInUserIdField();
+	}
+	
+	@Test(enabled = true)
+	public void inputTextInUserIdAndPasswordFieldThenClickLoginButtonTest () throws InterruptedException {
+		homePage.inputTextInUserIdAndPasswordFieldThenClickLoginButton();
+	}
 	
 	
 	@Test (enabled = false, priority = 2)

@@ -18,15 +18,32 @@ public class BaseClass {
 	public void setUp() {
 		// First job is to recognize the location of driver from your device
 		// right click on chromedriver.exe --- properties -- copy the location an paste below
+		
+		/*
+		// System is a class and setProperty is a method
+		// 1st way, to show the location of chrome driver
+		// This is an absolute path
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Tofael\\eclipse-workspace\\gov.cms.portal.may\\driver\\chromedriver.exe");
+		*/
+		
+		// new
+		// 2nd way, to show the location of the chrome driver
+		// This is a dynamic way (relative path)
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+ "/driver/chromedriver.exe");
+		
+		
+		
+		
 		// We instantiated the driver here
 		driver = new ChromeDriver();
-		// maximize method maximize the window
-		driver.manage().window().maximize();
 		// deleteAllCookies do delete the cookies
 		driver.manage().deleteAllCookies();
 		// get method is used to get the targeted url
 		driver.get("https://portal.cms.gov/portal/");
+		// maximize method maximize the window
+		// driver.manage().window().maximize();
+		// We can also use fullscreen() instead of maximize()
+		driver.manage().window().fullscreen();
 		// Pageloadtimeout is to wait to load the page for curtain amount of time
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
 		// Implicitly wait is used to wait for each web element
