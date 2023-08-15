@@ -2,10 +2,14 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.devtools.v113.systeminfo.model.VideoDecodeAcceleratorCapability;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+
+// new, you have to manually write it to get access
+// this is possible when they are static in nature, * means all
+// This is called static import
+import static common.CommonActions.*;
 
 public class HomePage {
 	public WebDriver driver;
@@ -14,6 +18,7 @@ public class HomePage {
 		this.driver = driver;
 		// PageFactory help to instantiate WebElements
 		PageFactory.initElements(driver, this);
+		// If no PageFactory class, Web element can't instantiate and show NullPointerException
 	}
 	
 	// 1st way: Most common way to write the WebElement (@FindBy), you must know how to do that
@@ -32,6 +37,13 @@ public class HomePage {
 	
 	@FindBy(className = "cms-newuser-reg")
 	WebElement newUserRegistration;
+	
+	// Used it to show the common action method exception
+	@FindBy(className = "cms-newuser-registration")
+	WebElement wrongNewUserRegistration;
+	
+	@FindBy(xpath = "//a[text()='User ID']")
+	WebElement forgotUserId;
 	
 	@FindBy(xpath = "//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']")
 	WebElement logo;
@@ -54,12 +66,53 @@ public class HomePage {
 	public void clickNewUserRegistration() {
 		newUserRegistration.click();
 		// We used try catch block to throw exception
+		// as we used Thread.sleep either we can use throws or we can use try catch block
+		// we used try catch block here, No relation of try catch with click() method
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public void clickWrongNewUserRegistration() {
+		wrongNewUserRegistration.click();
+		// We used try catch block to throw exception
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void forgotUserIdClick() throws InterruptedException {
+		clickElement(forgotUserId);
+		Thread.sleep(5000);
+	}
+	
+	// We are using sendKeys() to input text
+	public void inputTextInUserIdField () {
+		userId.sendKeys("May2023QABootcamp");
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void inputTextInUserIdAndPasswordFieldThenClickLoginButton () throws InterruptedException {
+		inputText(userId, "Enthrall_May_2023");
+		Thread.sleep(4000);
+		inputText(password, "AllLazyPeople@123");
+		Thread.sleep(4000);
+		clickElement(loginButton);
+		Thread.sleep(4000);
+	}
+	
+	
+	
+	
+	
 	
 	public void clickLogo() throws InterruptedException {
 		logo.click();
