@@ -25,6 +25,15 @@
 		    <!--scope>test</scope>-->
 		</dependency>
 		
+		<!--If you add a new dependency you do right click, maven, then update project -->
+		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+		<dependency>
+		    <groupId>io.github.bonigarcia</groupId>
+		    <artifactId>webdrivermanager</artifactId>
+		    <version>5.4.1</version>
+		</dependency>
+		
+		
 	</dependencies>
 	
 	<build>
