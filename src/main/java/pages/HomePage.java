@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -48,9 +49,12 @@ public class HomePage {
 	@FindBy(xpath = "//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']")
 	WebElement logo;
 	
+	// 3rd way to write the WebElement: not common, here I used unlock web element from the home page
+	// instead of xpath, we can use id, name, class etc as locator.
+	By unlock = By.xpath("//a[text()='unlock']");
+	// Please see line 116 for clickUnlock() method
 	
-	
-	public void clickLoginButton() throws InterruptedException {
+	public void clickLoginButton() throws InterruptedException  {
 		loginButton.click();
 		Thread.sleep(5000);
 	}
@@ -109,7 +113,12 @@ public class HomePage {
 		Thread.sleep(4000);
 	}
 	
-	
+	public void clickUnlock() throws InterruptedException {
+		Thread.sleep(3000);
+		// new way to call the web element
+		driver.findElement(unlock).click();
+			Thread.sleep(5000);
+	}
 	
 	
 	
