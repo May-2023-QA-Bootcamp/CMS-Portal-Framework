@@ -120,12 +120,16 @@ public class HomePage {
 			Thread.sleep(5000);
 	}
 	
-	
-	
-	
 	public void clickLogo() throws InterruptedException {
 		logo.click();
 		Thread.sleep(5000);
 	}
+	
+	public boolean logoDisplayed () {
+		boolean flag = logo.isDisplayed();
+		return flag;
+	}
+	
+	
 
 }
