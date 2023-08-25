@@ -3,14 +3,18 @@ package baseUtil;
 import java.time.Duration;
 
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import pages.ForgotUserId;
 import pages.HomePage;
 import utils.Configuration;
 import static utils.IConstant.*;
@@ -20,6 +24,10 @@ public class BaseClass {
 	public HomePage homePage; // or we can use protected type, otherwise it is default type
 	Configuration config;
 	protected Dimension dimension;
+	public ForgotUserId forgotUserId;
+	protected Select select;
+	protected Actions actions;
+	protected JavascriptExecutor js;
 	
 	@BeforeMethod
 	public void setUp() {
@@ -62,6 +70,7 @@ public class BaseClass {
 	
 	public void initClasses () {
 		homePage = new HomePage(driver);
+		forgotUserId = new ForgotUserId(driver);
 	}
 	
 	// After a test is done, what need to do

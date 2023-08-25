@@ -4,12 +4,15 @@ import java.time.Duration;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import baseUtil.BaseClass;
 
@@ -402,7 +405,7 @@ public class HomePageTest extends BaseClass {
 	}
 	
 
-	@Test (enabled = true)
+	@Test (enabled = false)
 	public void logoDisplayedTest04 () {
 		homePage.logoDisplayed(); // Actual Result : true
 		Assert.assertFalse(true, "Application Logo is Displayed, but expected result is not to dispaly ..... ..... ");
@@ -410,21 +413,197 @@ public class HomePageTest extends BaseClass {
 		// error message will be appeared when the assertion failed 
 	}
 	
+	// A regular title test
+	@Test(enabled = false)
+	public void use_of_getTitle_method01() throws InterruptedException {
+		String actual = driver.getTitle();
+		Thread.sleep(5000);	
+		System.out.println("The title of the Page is: " + actual);
+	}
+	
+	// Will Pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion01() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home page Title doesn't match");
+		// Hard Assertion will not go to next line if failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	
+	}
+	
+	// Will fail
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion02() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal        ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home page Title doesn't match"); // Hard Assertion, execution stopped here if Assertion fail
+		// java.lang.AssertionError: Home Page Title doesn't match .......  expected [CMS Enterprise Portal           ] but found [CMS Enterprise Portal]
+		// Hard Assertion will not go to next line if failed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	
+	}
+	
+	// Will pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion03() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal        ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(actual, expected, "Home page Title doesn't match"); 
+		// Soft Assertion, execution will not stopped here if Assertion is failed in above line
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	}
+	
+	// Very very importan for use in framework and also a interview question
+	// similar like above, nothing different, extra example
+	@Test(enabled = false)
+	public void use_of_mouse_hoverAction_on_ourLocations () throws InterruptedException {
+		Thread.sleep(4000);
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement ourLocations = driver.findElement(By.xpath("//a[normalize-space(text()) = 'Our Locations' and @class='hidden-xs dropdown']")); 
+		Thread.sleep(4000);
+		actions = new Actions(driver); // Actions class is instantiated in base class, actions object came form there
+		actions.moveToElement(ourLocations).build().perform();
+		Thread.sleep(6000);		
+		System.out.println("\nThe text of this web element is: "+ ourLocations.getText());
+	
+	}
+	
+	// Regular click method
+	@Test(enabled = false)
+	public void use_of_click_method_in_loginButtonTest () throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).click();
+		Thread.sleep(3000);
+	}
+	
+	// interview question: what are the alternative of click()
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest01() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.ENTER);
+		Thread.sleep(3000);
+	}
+	
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest02() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.RETURN);
+		Thread.sleep(3000);
+	}
+	
+	// important
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest03() throws InterruptedException {
+		WebElement loginButton = driver.findElement(By.id("cms-login-submit"));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click()", loginButton);
+		// arguments[0] means, find the web element of index 0, first occurrence
+		Thread.sleep(4000);
+	}	
+	
+	// alternate of click()
+	// "arguments[0].click()" --- easy to memorize, memorize it, if you want
+	// follow the above one, because you can use any kind of locator 
+	// (specially xpath is difficult to create by below one)
+	// Que: what is the alternative of click() method or click an web element 
+	// or how to find a hidden web element-- very important interview question 
+	// don't follow this one, but if you ever see it, i hope you can recognize it
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest04() throws InterruptedException {
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("document.getElementById('cms-login-submit').click();");
+		Thread.sleep(4000);
+	}
+	
+	// From here till line 564, this is high level, so just see, don't take them seriously
+	// alternative to click an web element in many ways (never memorize, a collection of code)
+	// Not important
+	
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest06() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.click(homepageLoginButton).perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest07() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.moveToElement(homepageLoginButton).click().perform();
+	}
+
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest08() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.clickAndHold(homepageLoginButton).release().perform();
+	}
+
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest09() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.sendKeys(homepageLoginButton, Keys.RETURN).perform();
+	}
+	
+	// login process regular to compare with line 579
+	@Test(enabled = false)
+	public void use_of_sendKeys_method_then_click() throws InterruptedException {
+		driver.findElement(By.xpath("//input[@id='cms-login-userId']")).sendKeys("January 2023");
+		Thread.sleep(4000);
+		driver.findElement(By.name("pass-d")).sendKeys("Enthrall@12345");
+		Thread.sleep(4000);
+		driver.findElement(By.name("Submit Login")).click();
+		Thread.sleep(4000);		
+	}
+	
+	// login process by JavascriptExecutor
+	// alternative of sendKeys()
+	@Test(enabled = true)
+	public void use_of_sendKeys_method_by_javascriptExecutor_then_click() throws InterruptedException {
+		WebElement userId = driver.findElement(By.xpath("//input[@id='cms-login-userId']"));
+		WebElement password = driver.findElement(By.name("pass-d"));
+		WebElement loginButton = driver.findElement(By.name("Submit Login"));
+		js = (JavascriptExecutor) driver; // we instantiated in Base class
+		js.executeScript("arguments[0].value = 'August 2023'", userId); // how to send text inside a field by JavascriptExecutor
+		Thread.sleep(4000);
+		js.executeScript("arguments[0].value = 'Enthrall@12345'", password);
+		Thread.sleep(4000);
+		js.executeScript("arguments[0].click()", loginButton); 
+		Thread.sleep(4000);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	
 	
 	
@@ -433,6 +612,18 @@ public class HomePageTest extends BaseClass {
 	
 	
 	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
 	
 	
 	
