@@ -10,6 +10,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -28,6 +29,7 @@ public class BaseClass {
 	protected Select select;
 	protected Actions actions;
 	protected JavascriptExecutor js;
+	protected WebDriverWait wait;
 	
 	@BeforeMethod
 	public void setUp() {
@@ -42,6 +44,7 @@ public class BaseClass {
 		long explicitlyWait =	Long.parseLong(config.getProperties(EXPLICITLY_WAIT));		
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTime));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitlyWait));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(explicitlyWait));
 		initClasses();
 	}
 	

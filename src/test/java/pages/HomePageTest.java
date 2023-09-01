@@ -1,13 +1,20 @@
 package pages;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.time.Duration;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -576,7 +583,7 @@ public class HomePageTest extends BaseClass {
 	
 	// login process by JavascriptExecutor
 	// alternative of sendKeys()
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_sendKeys_method_by_javascriptExecutor_then_click() throws InterruptedException {
 		WebElement userId = driver.findElement(By.xpath("//input[@id='cms-login-userId']"));
 		WebElement password = driver.findElement(By.name("pass-d"));
@@ -589,6 +596,323 @@ public class HomePageTest extends BaseClass {
 		js.executeScript("arguments[0].click()", loginButton); 
 		Thread.sleep(4000);
 	}
+	
+	// it will fail
+	@Test(enabled = false)
+	public void how_to_handle_hidden_element_by_regular_selenium_method() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.letskodeit.com/practice");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		Thread.sleep(4000);
+		// identify the 'Hide' element and click on it [line603]
+		// The search field will be disappeared, but we can pass value on it, as we get info before
+		driver.findElement(By.id("hide-textbox")).click();
+		Thread.sleep(4000);
+		// identify element and set/input text or value (line 606)
+		driver.findElement(By.xpath("//input[@id='displayed-text']")).sendKeys("May2023");
+		// it will fail by below error message
+		// org.openqa.selenium.ElementNotInteractableException: element not interactable
+		// whenever you find element not interactable in console, that is for sure a hidden element
+	
+	}
+	
+	@Test(enabled = false)
+	public void how_to_handle_hidden_element_by_javascriptExecutor() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.letskodeit.com/practice");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		Thread.sleep(4000);
+		// identify the 'Hide' element and click on it [line603]
+		// The search field will be disappeared, but we can pass value on it, as we get info before
+		driver.findElement(By.id("hide-textbox")).click();
+		Thread.sleep(4000);
+		// identify element and set/input text or value by JavascriptExecutor
+		WebElement searchField = driver.findElement(By.xpath("//input[@id='displayed-text']")); 
+		js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].value = 'May 2023' ", searchField);
+		Thread.sleep(4000);
+		
+		// not important
+		// Extra code
+		// Extra not related to hidden elements and not important
+		// How to get title of the page by JavaScriptExecutor?
+		// How to read a JavaScript variable in Selenium WebDriver?
+		// alternate of getTitle()
+		String title = (String) js.executeScript("return document.title");
+		System.out.println("Title of the webpage :" + title);
+		
+	}
+	
+	/*
+	// very very important
+	// "request An Appointment" web element IN MOUNTSINAI.ORG
+	// using visibilityOfElementLocated() method
+	// This is a very common scenario in industry to use explicitly wait
+	@Test(enabled = true)
+	public void use_of_explicitly_wait_in_MountSinai01() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+		// Request an Appointment element
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[normalize-space(text())='Our Locations' and @class='hidden-xs dropdown']"))).click();
+		Thread.sleep(5000);
+		// the below line is not part of testing, finding doctor name by putting a name in the field
+		// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='form-control']//parent::div[@class='form-group form-inline']"))).sendKeys("Andrea Perez");
+		// driver.findElement(By.xpath("(//div[@class='button-div hidden-xs'])[1]")).click();
+		driver.findElement(By.cssSelector("C-24-Call-To-Action.mshs-sidebar.pink-cta-bg")).click();
+		Thread.sleep(4000);
+	
+	
+		//cms-unlock-account
+	}
+	*/
+	
+	
+	
+	// very very important
+	// when the web element always failed in test, use explicitly wait, in this web site doesn't have that complex scenario
+	// "unlock" web element 
+	// using visibilityOfElementLocated() method
+	// This is a very common scenario in industry to use explicitly wait
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai01() throws InterruptedException {
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cms-unlock-account"))).click();
+		Thread.sleep(5000);
+	
+	}
+	
+	// very very important
+	// when the web element always failed in test, use explicitly wait, in this web site doesn't have that complex scenario
+	// "unlock" web element 
+	// using elementToBeClickable() method
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai02() throws InterruptedException {
+		Thread.sleep(2000);
+		WebElement element01 = driver.findElement(By.id("cms-unlock-account"));
+		wait.until(ExpectedConditions.elementToBeClickable(element01)).click();
+		Thread.sleep(5000);
+	
+	}
+	
+	// important
+	// when the web element always failed in test, use explicitly wait, in this web site doesn't have that complex scenario
+	// "unlock" web element 
+	// using visibilityOf() method
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai03() throws InterruptedException {
+		Thread.sleep(2000);
+		WebElement element02 = driver.findElement(By.id("cms-unlock-account"));
+		wait.until(ExpectedConditions.visibilityOf(element02)).click();
+		Thread.sleep(5000);
+	
+	}
+	
+	// Not important, you can use it to practice
+	// "unlock" web element 
+	// using visibilityOf() method
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai04() throws InterruptedException {
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cms-unlock-account"))).click();
+		Thread.sleep(5000);
+	
+	}
+
+	// Not important, you can use it to practice
+	// "New User Registration" web element 
+	// using textToBePresentInElement() method
+	// this is not a clickable method, just to recognize the web element
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai05() throws InterruptedException {
+		Thread.sleep(2000);
+		WebElement nur = driver.findElement(By.xpath("//a[text()='New User Registration']")); 
+		boolean outcome = wait.until(ExpectedConditions.textToBePresentInElement(nur, "New User Registration"));
+		System.out.println(outcome);
+		Thread.sleep(5000);
+	
+	}
+	
+	// important interview question
+	// 1st way: Scroll by Actions class
+	// scroll bottom and then top
+	@Test (enabled = false)
+	public void use_of_scroll_down_and_scroll_up_by_actions_class_01 () throws InterruptedException {
+		Thread.sleep(5000);
+		actions = new Actions(driver);
+		// for Scroll Down using Actions class, to go at the bottom of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(5000);
+		// for Scroll Up using Actions class at the top of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.HOME).perform();
+		Thread.sleep(5000);
+		//Keys.UP or Keys.Down doesn't change much but the test case passes, we will not use them
+	}
+	
+	// important interview question
+	// 1st way: Scroll by Actions class
+	// scroll bottom and then top
+	@Test (enabled = false)
+	public void use_of_scroll_down_by_actions_class_do_the_dropdpwn () throws InterruptedException {
+		Thread.sleep(5000);
+		actions = new Actions(driver);
+		// for Scroll Down using Actions class, to go at the bottom of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(5000);
+		// Just we clicked on the dropdown, but unfortunately that is not developed by drop down
+		driver.findElement(By.xpath("//div[@class='ng-input']")).click();
+		Thread.sleep(4000);		
+		// for Scroll Up using Actions class at the top of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.HOME).perform();
+		Thread.sleep(5000);
+		//Keys.UP or Keys.Down doesn't change much but the test case passes, we will not use them
+	}
+	
+	// important interview question
+	// 2nd way: Scroll by javascriptExecutor
+	// scroll in a certain position (not at the bottom or up)
+	@Test (enabled = false)
+	public void use_of_scroll_down_and_scroll_up_by_javascriptExecutor () throws InterruptedException {
+		// This will scroll down the page by 1000 pixel vertically
+		// here 0 is x axis, 1000 y axis
+		// you choose your pixel accordingly to reach to that web element
+		Thread.sleep(5000);	
+		js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0, 1000)", ""); // scroll down till 1000px
+		// You can change the value of 3000, and put your own to see the web element you wanna test
+		Thread.sleep(5000);	
+		js.executeScript("window.scrollBy(0, -1000)", ""); // scroll up till 1000px
+		// minus when it goes opposite of down
+		Thread.sleep(4000);
+		
+		// not related with this test
+		// How to refresh by Javascript, 
+		js.executeScript("history.go(0)"); // To do refresh by Javascript
+		// How to getTitle by Javascript, 
+		String sText = js.executeScript("return document.title;").toString(); // fetching page title by javascript
+		System.out.println("The title of the Page is: "+sText);
+	}
+	
+	// Another code for scrolling and then search for hidden web element [save this code]
+	@Test(enabled = false)
+	public void how_to_handle_hidden_element_by_javascriptExecutor02() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://enthrallit.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		// Click on Selenium from Header
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//a[text()='Selenium']")).click();
+		Thread.sleep(4000);
+		// Scrolling to ses the web element
+		js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0, 1200)", ""); // scroll down till 1000px
+		// identify the 'Hide' element and click on it
+		// The search field will be disappeared, but we can pass value on it, as we get info before
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//button[@id='formButton3']")).click();
+		// identify element and set/input text or value by JavascriptExecutor
+		WebElement serchField = driver.findElement(By.xpath("//input[@class='form-control']//parent::form[@id='form3']"));
+		js.executeScript("arguments[0].value='January 2023' ", serchField);
+		Thread.sleep(4000);
+	}
+	
+	// not important, just to know
+	@Test (enabled = false)
+	public void use_of_scroll_down_and_scroll_up_by_robot_class () throws InterruptedException, AWTException {
+		// For some reason, they are not going completely Up or Down
+		Robot robot = new Robot();
+		// Scroll Down using Robot class
+		robot.keyPress(KeyEvent.VK_PAGE_DOWN); // Constant for the PAGE_DOWN virtual key.
+		robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
+		Thread.sleep(5000);
+		
+		// Scroll Up using Robot class
+        robot.keyPress(KeyEvent.VK_PAGE_UP); // Constant for the PAGE_UP virtual key. 
+        robot.keyRelease(KeyEvent.VK_PAGE_UP);
+        Thread.sleep(5000);
+        
+        driver.navigate().back();
+        Thread.sleep(5000);
+		
+	}
+
+	// scroll Into View The Element
+	// This is important, standard interview question
+	// This is better to use
+	@Test(enabled = false)
+	public void scrollIntoViewTheElement() throws InterruptedException {
+		Thread.sleep(4000);
+		// it's crossing the web element, but working
+		WebElement enterprisePortal = driver.findElement(By.xpath("//h1[text()='Enterprise Portal']"));
+		js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(true);", enterprisePortal);
+		Thread.sleep(4000);
+	}
+	
+	// important for interview
+	@Test(enabled = false)
+	public void web_based_alert_accept_test () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("http://softwaretestingplace.blogspot.com/2017/03/javascript-alert-test-page.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.findElement(By.xpath("//button[text()='Try it']")).click();
+		Thread.sleep(4000);
+		Alert alert = driver.switchTo().alert();
+		Thread.sleep(4000);
+		System.out.println("The text present in the alert is: " + alert.getText());
+		alert.accept();
+		Thread.sleep(4000);
+		// line 866, not part of the accept function, 
+		// we just added to know about, the text is present in the alert or not
+			
+		}
+	
+	// important for interview
+	@Test(enabled = false)
+	public void web_based_alert_dismiss_test () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("http://softwaretestingplace.blogspot.com/2017/03/javascript-alert-test-page.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.findElement(By.xpath("//button[text()='Try it']")).click();
+		Thread.sleep(4000);
+		Alert alert = driver.switchTo().alert();
+		Thread.sleep(4000);
+		System.out.println("The text present in the alert is: " + alert.getText());
+		alert.dismiss();
+		Thread.sleep(4000);
+		// line 885, not part of the accept function, 
+		// we just added to know about, the text is present in the alert or not
+			
+		}
+	
+	// important for interview
+	@Test(enabled = true)
+	public void authenticationPopUpTest () throws InterruptedException {
+		Thread.sleep(5000);	
+		String userName = "admin";
+		String password = "admin";
+		// adding user name, password with URL
+		// original one is: "https://the-internet.herokuapp.com/basic_auth";
+		// Updated one is: "https://admin:admin@the-internet.herokuapp.com/basic_auth";
+		String url = "https://" + userName + ":" + password + "@" + "the-internet.herokuapp.com/basic_auth"; // learn this line, important interview question	
+		driver.get(url);
+		Thread.sleep(5000);	
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(5000);
+		
+		// The below part is not part of this test
+		// identify and get text after authentication of popup
+		String t = driver.findElement(By.tagName("p")).getText(); // we use tag name as a locator in our course
+		System.out.println("Text is: " + t);
+	}
+	
+
 
 
 
