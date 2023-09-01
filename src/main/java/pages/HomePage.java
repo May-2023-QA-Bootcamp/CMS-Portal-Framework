@@ -54,6 +54,10 @@ public class HomePage {
 	By unlock = By.xpath("//a[text()='unlock']");
 	// Please see line 116 for clickUnlock() method
 	
+	// for logger test
+	@FindBy (name = "user-d-wrong")
+	WebElement wrongUserId;
+	
 	public void clickLoginButton() throws InterruptedException  {
 		loginButton.click();
 		Thread.sleep(5000);
@@ -129,6 +133,8 @@ public class HomePage {
 		boolean flag = logo.isDisplayed();
 		return flag;
 	}
+
+		
 	
 	
 
