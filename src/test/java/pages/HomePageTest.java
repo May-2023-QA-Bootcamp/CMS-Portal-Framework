@@ -4,12 +4,14 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -890,8 +892,8 @@ public class HomePageTest extends BaseClass {
 			
 		}
 	
-	// important for interview
-	@Test(enabled = true)
+	// only important for interview
+	@Test(enabled = false)
 	public void authenticationPopUpTest () throws InterruptedException {
 		Thread.sleep(5000);	
 		String userName = "admin";
@@ -912,12 +914,270 @@ public class HomePageTest extends BaseClass {
 		System.out.println("Text is: " + t);
 	}
 	
+	// only important for interview
+	@Test(enabled = false)
+	public void use_of_right_click_action () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement rcButton = driver.findElement(By.xpath("//span[text()='right click me']"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(rcButton).contextClick().build().perform();
+		Thread.sleep(4000);
+		// From Line 929, not part of testing, just completed the scenario
+		// Just keep below code, Can't find the web element for Edit at present, the line 929 is from my collection.
+		// Below 2 is not relevant to right click, just doing some extra, which we know already
+		// Next: I want to click on Edit link on the displayed menu options
+		WebElement edit = driver.findElement(By.xpath("//span[text()='Edit']"));
+		Thread.sleep(4000);
+		edit.click(); // a regular click , not a right click
+		Thread.sleep(5000);
+		// Switch to the alert box and click on OK button
+		Alert alert = driver.switchTo().alert();
+		System.out.println("\nAlert Text:" + alert.getText());
+		alert.accept();
+		Thread.sleep(4000);
+	}
+	
+	// only important for interview
+	@Test(enabled = false)
+	public void use_of_double_click_action () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(4000);
+		WebElement dcButton = driver.findElement(By.xpath("//button[text()='Double-Click Me To See Alert']"));
+		Actions actions = new Actions(driver);
+		actions.doubleClick(dcButton).build().perform();
+		Thread.sleep(4000);
+		// Not part of the double click action
+		// Switch to the alert box and click on OK button
+		Alert alert = driver.switchTo().alert();
+		System.out.println("\nAlert Text:" + alert.getText());
+		alert.accept();
+		Thread.sleep(4000);
+	}
 
+	// not important for interview
+	@Test(enabled = false)
+	public void use_of_drag_and_drop_action () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demo.guru99.com/test/drag_drop.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Element which needs to drag (Bank)
+		WebElement sourceLocator = driver.findElement(By.id("credit2")); // Web element of the Bank button, it will be dragged
+		// Element where need to be dropped.(In 'Account' field of debit side)
+		WebElement targetLocator = driver.findElement(By.xpath("//ol[@id='bank']")); // and it will be dropped here
+		// We Use Actions class for drag and drop.
+		Actions actions = new Actions(driver);
+		actions.dragAndDrop(sourceLocator, targetLocator).build().perform();
+		Thread.sleep(4000);	
+		
+	}
 
+	// not important
+	@Test(enabled = false)
+	public void use_of_slider_action () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demoqa.com/slider/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Retrieve WebElemnt 'slider' to perform mouse hover
+		// This is the field where volume is increased
+		WebElement slider = driver.findElement(By.xpath("//input[@class='range-slider range-slider--primary']"));
+		// Move mouse to x offset 50 i.e. in horizontal direction
+		Thread.sleep(5000);
+		// to test the slider is working or not
+		// dragAndDropBy (element, int xoffset, int yoffset)
+		Actions actions = new Actions(driver);
+		actions.dragAndDropBy(slider, 50, 0).build().perform(); // learn from here, 50 is in pixel which might not match with real volume change, real volume 60
+		Thread.sleep(5000);
+		// slider.click();
+		System.out.println("Moved slider in horizontal directions");
+	}
+		
+	
+	// not important (alternate)
+	@Test(enabled = false)
+	public void use_of_slider_action_alternate () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demoqa.com/slider/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Retrieve WebElemnt 'slider' to perform mouse hover
+		// This is the field where volume is increased
+		WebElement slider = driver.findElement(By.cssSelector("input.range-slider.range-slider--primary")); 
+		// Move mouse to x offset 65 i.e. in horizontal direction
+		Thread.sleep(5000);
+		Actions actions = new Actions(driver);
+		actions.clickAndHold(slider);
+		Thread.sleep(5000);
+		actions.moveByOffset(65, 0).build().perform(); // pixel 65, real volume 63
+		Thread.sleep(5000);
+		System.out.println("Moved slider in horizontal directions");
+		
+	}
 
+	@Test(enabled = false)
+	public void mouseHoverActionOnAboutUs() throws InterruptedException {
+		Thread.sleep(4000);
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement aboutUs = driver.findElement(By.xpath("//a[normalize-space(text()) = 'About Us' and @class='hidden-xs dropdown']")); 
+		Thread.sleep(4000);
+		actions = new Actions(driver); // Actions class is instantiated in base class, actions object came form there
+		actions.moveToElement(aboutUs).build().perform();
+		Thread.sleep(6000);		
+		// Use of findElements()
+		List<WebElement> listOfAboutUs = driver.findElements(By.xpath("//a[normalize-space(text()) = 'About Us' and @class='hidden-xs dropdown']//following-sibling::div//child::div//child::div"));
+		
+		for(int i = 0; i< listOfAboutUs.size(); i++) {
+			System.out.println(listOfAboutUs.get(i).getText());
+		}
+	
+	}
+	/*
+	// same but another example from costco
+	@Test(enabled = true)
+	public void mouseHoverActionOnDeals() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.costco.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement deals = driver.findElement(By.xpath("//a[@id='Home_Ancillary_2']"));
+		Thread.sleep(5000);
+		actions = new Actions(driver); 
+		actions.moveToElement(deals).build().perform();
+		Thread.sleep(5000);
+		List<WebElement> listofDeals =  driver.findElements(By.xpath("//a[@id='Home_Ancillary_2']//child::div//child::div//child::div//child::div//child::div"));
+		int numberOfElements = listofDeals.size();
+		System.out.println("Number of web Elements: "+ numberOfElements);
+		for(int i=0; i<numberOfElements; i++) {
+			System.out.println(listofDeals.get(i).getText());
+		}
+		// repeating 3 times, there is an issue
+		
+	}
+	*/
+	
+	// How to read the content of a Table 
+	@Test(enabled = false)
+	public void read_table () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.amazon.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(5000);
+		actions = new Actions(driver); 
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(5000);
+		// WebElement table = driver.findElement(By.tagName("table")); // we can use tag name too
+		WebElement table = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon"));
+		System.out.println(table.getText());
+	}
+	
+	// How to read the row of a Table 
+	@Test(enabled = false)
+	public void readAnyRowofTheTable () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.amazon.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(5000);
+		actions = new Actions(driver); 
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(5000);
+		WebElement row = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon tr:nth-child(1)"));
+		System.out.println(row.getText());
+	}
+	
+	// How to read a cell of a Table 
+	@Test(enabled = false)
+	public void readAnyCellOfARowofTheTable () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.amazon.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(10000);
+		//actions = new Actions(driver); 
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(5000);
+		WebElement cell = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon tr:nth-child(3) td:nth-child(1)"));
+		System.out.println(cell.getText());			
+	}
+	
+	@Test (enabled = false, priority = 1, groups = {"functionalTest", "sanityTest", "smokeTest", "regressionTest"})
+	public void use_of_getTitle_method_with_assertion11() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	@Test(enabled = false, priority = 1, groups = {"regressionTest"})
+	public void use_of_getTitle_method_with_assertion12() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  // Hard Assertion, execution stopped here if Assertion fail
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	@Test(enabled = false, priority = 1, groups = {"sanityTest", "regressionTest"})
+	public void use_of_getTitle_method_with_assertion13() throws InterruptedException {
+		String expected = "A CMS Enterprise Portal"; // WHICH is wrong
+		String actual = driver.getTitle();
+		System.out.println("Home Page Title is: "+actual);
+		SoftAssert softAssert = new SoftAssert(); 	// Soft Assertion, mainly interview question, not used generally
+		softAssert.assertEquals(actual, expected, "Home Page Title doesn't match ..." );
+		String currentURL =	driver.getCurrentUrl();
+		System.out.println("The current url from priority 3 is: "+currentURL);
+	
+	}
+	
+	@Test (enabled = false, priority = 4, groups = {"smokeTest", "sanityTest", "functionalTest", "regressionTest"})
+	public void logoTest(){
+		WebElement logo = driver.findElement(By.xpath("//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']"));
+		boolean flag = logo.isDisplayed();
+		System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertTrue(true, "Application Logo is not displayed .....");	// error message will be appeared when the assertion failed 
+	
+	}
+	
+	@Test(enabled = false)
+	public void use_of_expectedExceptions01 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will fail");
+		int i = 1/0;	
+	}
+	
+	@Test(enabled = false, expectedExceptions = ArithmeticException.class)
+	public void use_of_expectedExceptions02 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will pass");
+		int i = 1/0;	
+	}
+	
+	// wrong login button
+	@Test(enabled = false, expectedExceptions = NoSuchElementException.class)
+	public void use_of_expectedExceptions03 () throws InterruptedException {
+		driver.findElement(By.id("ms-login-submit")).click();
+		Thread.sleep(3000);
+	}
+	
 
-
-
+			
 
 
 
